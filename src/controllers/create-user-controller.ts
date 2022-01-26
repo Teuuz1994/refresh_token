@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { AuthenticationUser } from '../use-cases/authenticate-user'
+import { AuthenticationUser } from '../use-cases/create-user'
 
-class AuthenticateUserController {
+export default class CreateUserController {
   async handle(request: Request, response: Response) {
     const {
       name,
