@@ -2,7 +2,7 @@ import { hash } from 'bcryptjs'
 
 import { client } from '../../prisma/client'
 
-type HttpRequest = {
+interface HttpRequest {
   name: string
   username: string
   password: string
