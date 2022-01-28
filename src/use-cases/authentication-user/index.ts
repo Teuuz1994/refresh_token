@@ -1,6 +1,7 @@
 import { compare } from "bcryptjs";
 import { sign } from 'jsonwebtoken';
 
+import GenerateTokenProvider from "../../provider/generate-token-provider";
 import GenerateRefreshToken from '../../provider/generate-refresh-token'
 import { client } from "../../prisma/client";
 import { config } from '../../config/jsonwebtoken-config'
@@ -28,9 +29,13 @@ export default class AuthenticationUser {
       throw new Error('User or password is incorrect, try again')
     }
 
-    const token = sign({}, config.secret, {
-      subject: userAlreadyExists.id,
-      expiresIn: '20s'
+    const generateTokenProvider = new GenerateTokenProvider()
+    const token = generateTokenProvider.execute(userAlreadyExists.id)
+
+    await client.refreshToken.deleteMany({
+      where: {
+        userId: userAlreadyExists.id
+      }
     })
 
     const generateRefreshToken = new GenerateRefreshToken()
