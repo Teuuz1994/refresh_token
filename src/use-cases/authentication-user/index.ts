@@ -2,6 +2,7 @@ import { compare } from "bcryptjs";
 import { sign } from 'jsonwebtoken';
 
 import { client } from "../../prisma/client";
+import { config } from '../../config/jsonwebtoken-config'
 
 interface HttpRequest {
   username: string
@@ -26,7 +27,7 @@ export default class AuthenticationUser {
       throw new Error('User or password is incorrect, try again')
     }
 
-    const token = sign({}, 'c0718872-f15a-4deb-bc30-a445d795dadb', {
+    const token = sign({}, config.secret, {
       subject: userAlreadyExists.id,
       expiresIn: '20s'
     })
