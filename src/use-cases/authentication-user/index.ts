@@ -1,6 +1,7 @@
 import { compare } from "bcryptjs";
 import { sign } from 'jsonwebtoken';
 
+import GenerateRefreshToken from '../../provider/generate-refresh-token'
 import { client } from "../../prisma/client";
 import { config } from '../../config/jsonwebtoken-config'
 
@@ -32,6 +33,9 @@ export default class AuthenticationUser {
       expiresIn: '20s'
     })
 
-    return { token }
+    const generateRefreshToken = new GenerateRefreshToken()
+    const refreshToken = await generateRefreshToken.execute(userAlreadyExists.id)
+
+    return { token, refreshToken }
   }
 }
